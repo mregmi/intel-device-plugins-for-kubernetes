@@ -16,6 +16,8 @@ spec:
       containers:
       - name: intel-qat-kernel-plugin
         securityContext:
+          seLinuxOptions:
+            type: "container_device_plugin_t"
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           privileged: true

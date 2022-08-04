@@ -20,7 +20,8 @@ The Intel Device Plugins Operator for OpenShift Container Platform is a collecti
     ```
     $ oc apply -f https://raw.githubusercontent.com/intel/intel-device-plugins-for-kubernetes/v0.24.0/deployments/nfd/overlays/node-feature-discovery/node-feature-discovery-openshift.yaml
     ```
-    Create the NodeFeatureRule instance
+    - Create the NodeFeatureRule instance  
+    **Note:** By default, QAT device pci id supported are `["37c8", "4940"]`. If the pci id of the underlying QAT card is different, please add the entry to QAT device value in the file `/deployments/nfd/overlays/node-feature-rules/node-feature-rules-openshift.yaml`.
     ``` 
     $ oc apply -f https://raw.githubusercontent.com/intel/intel-device-plugins-for-kubernetes/v0.24.0/deployments/nfd/overlays/node-feature-rules/node-feature-rules-openshift.yaml
     ```

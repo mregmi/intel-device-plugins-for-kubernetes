@@ -13,7 +13,13 @@ The Intel Device Plugins Operator for OpenShift Container Platform is a collecti
 ## Prerequisites 
 - Make sure Red Hat OpenShift Cluster is ready to use and the developing machine is RHEL and `oc` command is installed and configured properly. Please note that the following operation is verified on Red Hat OpenShift Cluster 4.10 and working machine RHEL-8.5
 - Install the `oc` command to your development system
-- Make sure to install operator-sdk
+- Development machine configurations tested on -  
+
+    | Tool        | Version  |
+    | ------------- |-------------|
+    |go | go1.19 |
+    |kubectl | v1.24.3 |
+    |operator-sdk | v1.22.2 |
 - Install **NFD operator** (if it's not already installed). Follow the [link](https://docs.openshift.com/container-platform/4.10/hardware_enablement/psap-node-feature-discovery-operator.html)  
     **Note:** Please only install the NFD operator and use steps below to create the NodeFeatureDiscovery instance.  
     - Create the NodeFeatureDiscovery instance  

@@ -3,7 +3,7 @@
 ## Introduction
 The Intel Device Plugins Operator for OpenShift Container Platform is a collection of device plugins advertising Intel specific hardware resources to the kubelet. It provides a single point of control for Intel® Software Guard Extensions (Intel® SGX), Intel GPUs, Intel® QuickAccess Technology (Intel® QAT), Intel® Data Streaming Accelerator (Intel® DSA), and Intel® In-Memory Analytics Accelerator (Intel® IAA) devices to cluster administrators. 
 
-**This release supports Intel Device Plugin Operator with QAT device plugin functionality and is intended for Intel internal teams only for testing purposes.** 
+**This release supports Intel Device Plugin Operator with QAT device plugin functionality and is intended for testing purposes only.** 
 
 ## Minimum Hardware Requirements
 ### Intel QAT Enabled Server
@@ -11,8 +11,8 @@ The Intel Device Plugins Operator for OpenShift Container Platform is a collecti
 
 # Installation - Intel Device Plugins Operator
 ## Prerequisites 
-- Make sure Red Hat OpenShift Cluster is ready to use and the developing machine is RHEL and `oc` command is installed and configured properly. Please note that the following operation is verified on Red Hat OpenShift Cluster 4.10 and working machine RHEL-8.5
-- Install the `oc` command to your development system
+- Make sure Red Hat OpenShift Cluster is ready to use and the developing machine is RHEL and `oc` command is installed and configured properly. Please note that the following operation is verified on Red Hat OpenShift Cluster 4.11 and working machine RHEL-8.6
+- Install the `oc` command to your development machine
 - Development machine configurations tested on -  
 
     | Tool        | Version  |
@@ -20,7 +20,7 @@ The Intel Device Plugins Operator for OpenShift Container Platform is a collecti
     |go | go1.19 |
     |kubectl | v1.24.3 |
     |operator-sdk | v1.22.2 |
-- Install **NFD operator** (if it's not already installed). Follow the [link](https://docs.openshift.com/container-platform/4.10/hardware_enablement/psap-node-feature-discovery-operator.html)  
+- Follow the [link](https://docs.openshift.com/container-platform/4.10/hardware_enablement/psap-node-feature-discovery-operator.html) to install **NFD operator** (if it's not already installed).   
     **Note:** Please only install the NFD operator and use steps below to create the NodeFeatureDiscovery instance.  
     - Create the NodeFeatureDiscovery instance  
     ```
@@ -33,7 +33,7 @@ The Intel Device Plugins Operator for OpenShift Container Platform is a collecti
     ```
 
 ## Intel Device Plugins Operator Installation
-Since the operator is not released externally, you can install the operator using operator-sdk. Run 
+Install the operator using below command - 
 ```
 $ operator-sdk run bundle quay.io/ocpeng/intel-device-plugins-operator-bundle:0.24.1
 ```
@@ -45,21 +45,11 @@ $ operator-sdk run bundle quay.io/ocpeng/intel-device-plugins-operator-bundle:0.
 
 # Deployment - Intel QAT Device Plugin 
 ## Prerequisites
-In order to enable Intel QAT, there is a need for changing kernel parameters in the cluster node. This is done using [machine config](https://docs.openshift.com/container-platform/4.10/post_installation_configuration/machine-configuration-tasks.html). Please deploy the following machine config:
+In order to enable Intel QAT, there is a need for changing kernel parameters in the cluster node to enable `iommu`. This is done using [machine config](https://docs.openshift.com/container-platform/4.10/post_installation_configuration/machine-configuration-tasks.html). Please deploy the machine config using command -
 ```
-apiVersion: machineconfiguration.openshift.io/v1
-kind: MachineConfig
-metadata:
-  labels:
-    machineconfiguration.openshift.io/role: worker 
-  name: 100-worker-gpu 
-spec:
-  config:
-    ignition:
-      version: 3.2.0
-  kernelArguments:
-      - intel_iommu=on
+$ oc apply -f https://raw.githubusercontent.com/mregmi/intel-device-plugins-for-kubernetes/qat_enable/cmd/operator/ocp_quickstart_guide/mco-iommu.yaml
 ```
+**NOTE:** When the kernel parameter of the worker node is changed, the worker node will reboot. It is a one-time process. Please make sure that the worker node is up and running before deploying the QAT CR.
 
 
 ## Deploying Intel QAT Device Plugin Custom Resource
